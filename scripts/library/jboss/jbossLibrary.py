@@ -1396,7 +1396,7 @@ def removeXpoweredBy(servername, username, password):
     print 'Remove X-Powered-By Flag on: ' + servername + '...'
     cli = connect(servername, username, password)
     if (cli != None) :
-        cli.cmd("/subsystem=web/configuration=jsp-configuration/:write-attribute(name=x-powered-by,value=false)")
+        cli.cmd("/subsystem=web/configuration=jsp-configuration/:write-attribute(name=X_POWERED_BY,value=false)")
         cli.cmd("/system-property=org.apache.catalina.connector.X_POWERED_BY:add(value=false)")
     else:
         print 'Remove X-Powered-By Flag on: ' + servername + '...FAILED.'
