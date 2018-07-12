@@ -6,7 +6,7 @@ Created on 14 Oct 2016
 import errno
 import os
 import re
-from string import rsplit
+from string import split
 from threading import Thread
 
 
@@ -83,81 +83,88 @@ def replaceText(sourceString, findText, replaceText):
 
 def sanitizeJDBCCliVector(cliVector):
 
-    dsName = regularExpressionSearch("/subsystem=datasources/data-source=(.*)/", cliVector)
-    dsXAName = regularExpressionSearch("/subsystem=datasources/xa-data-source=(.*)/", cliVector)
+    dsName = regularExpressionSearch("/subsystem=datasources/data-source=(.*)", cliVector)
+    dsXAName = regularExpressionSearch("/subsystem=datasources/xa-data-source=(.*)", cliVector)
 
+    newCliVector = ''
+    
     if (dsName != "") :
         actualDSName = dsName
     elif (dsXAName != "") :
         actualDSName = dsXAName
 
-    splitExpression = rsplit(actualDSName, "/", -1)
+    splitExpression = split(actualDSName, "/", -1)
     newDSNameAndParams = ""
     subExpressionCount = 1
     if (len(splitExpression) > 1) :
         for subExpression in splitExpression :
-            if (subExpressionCount == 1) :
-                newDSNameAndParams = newDSNameAndParams + subExpression
+            if (subExpressionCount == 1) and (str(actualDSName).startswith("jdbc/")) :
+                newDSNameAndParams = newDSNameAndParams + subExpression + '\/'
+            elif (subExpressionCount < len(splitExpression) -1) :
+                newDSNameAndParams = newDSNameAndParams + subExpression + '/'
             else :
-                newDSNameAndParams = newDSNameAndParams + "\/" + subExpression
+                newDSNameAndParams = newDSNameAndParams + subExpression
                     
             subExpressionCount = subExpressionCount + 1
 
         if (dsName != "") :
-            newCliVector = "/subsystem=datasources/data-source=" + newDSNameAndParams + "/"
+            newCliVector = "/subsystem=datasources/data-source=" + newDSNameAndParams
         elif (dsXAName != "") :
-            newCliVector = "/subsystem=datasources/xa-data-source=" + newDSNameAndParams + "/"
+            newCliVector = "/subsystem=datasources/xa-data-source=" + newDSNameAndParams
 
     else :
         newCliVector = cliVector
+        
+    if not(str(newCliVector)[len(newCliVector)-1] == '/') :
+        newCliVector = newCliVector + '/'        
 
     return newCliVector
 
 def extractDatasourceName(cliVector):
-    dsName = regularExpressionSearch("/subsystem=datasources/data-source=(.*)/", cliVector)
+    dsName = regularExpressionSearch("/subsystem=datasources/data-source=(.*)", cliVector)
 
     if (str(dsName).startswith("/subsystem=datasources")) :
         return ""
 
-    splitExpression = rsplit(dsName, "/", -1)
+    splitExpression = split(dsName, "/", -1)
     newDSName = ""
     subExpressionCount = 1
-    if (splitExpression) :
-        if (len(splitExpression) > 1) :
-            for subExpression in splitExpression :
-                if (subExpressionCount == 1) :
-                    newDSName = newDSName + subExpression
-                else :
-                    newDSName = newDSName + "\/" + subExpression
-                    
-                subExpressionCount = subExpressionCount + 1
-        else :
-            newDSName = splitExpression[0]
+    if (len(splitExpression) > 1) :
+        for subExpression in splitExpression :
+            if (subExpressionCount == 1) and (str(dsName).startswith("jdbc/")) :
+                newDSName = newDSName + subExpression + '\/'
+            elif (subExpressionCount < len(splitExpression) -1) :
+                newDSName = newDSName + subExpression + '/'
+            else :
+                newDSName = newDSName + subExpression
+                
+            subExpressionCount = subExpressionCount + 1
+    else :
+        newDSName = splitExpression[0]
 
     return newDSName
 
 def extractXADatasourceName(cliVector):
-    dsName = regularExpressionSearch("/subsystem=datasources/xa-data-source=(.*)/", cliVector)
+    dsName = regularExpressionSearch("/subsystem=datasources/xa-data-source=(.*)", cliVector)
 
     if (str(dsName).startswith("/subsystem=datasources")) :
         return ""
 
-    splitExpression = rsplit(dsName, "/", -1)
+    splitExpression = split(dsName, "/", -1)
     newDSName = ""
     subExpressionCount = 1
-    if (splitExpression) :
-        if (len(splitExpression) > 1) :
-            for subExpression in splitExpression :
-                if (subExpressionCount == 1) :
-                    newDSName = newDSName + subExpression
-                elif (subExpressionCount > 2) :
-                    newDSName = newDSName + "\/" + subExpression
-                else:
-                    newDSName = newDSName + "/" + subExpression
-                    
-                subExpressionCount = subExpressionCount + 1
-        else :
-            newDSName = splitExpression[0]
+    if (len(splitExpression) > 1) :
+        for subExpression in splitExpression :
+            if (subExpressionCount == 1) and (str(dsName).startswith("jdbc/")) :
+                newDSName = newDSName + subExpression + '\/'
+            elif (subExpressionCount < len(splitExpression) -1) :
+                newDSName = newDSName + subExpression + '/'
+            else :
+                newDSName = newDSName + subExpression
+                
+            subExpressionCount = subExpressionCount + 1
+    else :
+        newDSName = splitExpression[0]
 
     return newDSName
 

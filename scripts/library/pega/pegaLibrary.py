@@ -12,6 +12,7 @@ from library.jboss.jbossLibrary import connectSilent, \
     restrictHttpMethods, setUtf8Encoding, setDatasourceCredentialsSingleDS, \
     setDatasourceConnectionURL
 
+
 # Assumes all Pega DS use the same password scheme. You ought to copy this method
 # and use it more locally to specify the credentials.
 def setJdbcCredentialsAllPegaDS(servername, username, password):
@@ -461,4 +462,4 @@ def securityHardenJBoss(servername,username,password):
     removeXpoweredBy(servername, username, password)
     restrictHttpMethods(servername, username, password)
     setUtf8Encoding(servername, username, password)
-    
+
