@@ -160,7 +160,7 @@ class auditObjectAtom():
         else :
             currentValue = self.currentValue
  
-        appendToAudit(self.servername + ',' + passFailRecord + ',' + self.auditTitle + ',current:"' + currentValue + '",target:"' + targetValue + '"\n')
+        appendToAudit('Env:' + strEnvironment + ' : ' + self.servername + ',' + passFailRecord + ',' + self.auditTitle + ',current:"' + currentValue + '",target:"' + targetValue + '"\n')
  
     def applyTargetValue(self):       
         print 'On Server: ' + self.servername + ' Applying : ' + self.auditTitle + '...'      
