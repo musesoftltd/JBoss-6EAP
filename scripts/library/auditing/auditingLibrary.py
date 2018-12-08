@@ -5,6 +5,7 @@ Created on 11 Oct 2016
 '''
  
 import datetime
+import os
  
 from library.jboss.jbossLibrary import setParameterValue, getParameterValue, \
     isServerRunning, getBindAddressManagement, getBindAddressPublic, \
@@ -14,30 +15,53 @@ from library.jboss.jbossLibrary import setParameterValue, getParameterValue, \
 from library.pega.pegaLibrary import getJdbcConnectionUrlAllPegaDataSourceSingleServer
 from library.util import mkdir_p, stripQuotes, appendToFile
  
-mkdir_p("./reports")
  
 datetimeSuffix = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H.%M.%S')
-# auditFileName =  './reports/technical' + '-' + datetimeSuffix  + '.csv'
-# reportFileName = './reports/managerial' + '-' + datetimeSuffix + '.csv'
+ 
 global auditFileName
 global reportFileName
 auditFileName =  ''
 reportFileName = ''
  
-global strEnvironment
-global strTechnologyType
-strEnvironment = ''
-strTechnologyType = ''
- 
 # Globals
 global currentAuditReportServer
-global currentAuditReportEnvironment
 currentAuditReportServer = ""
+ 
+global currentAuditReportEnvironment
 currentAuditReportEnvironment = ""
+ 
+# global strEnvironment
+# strEnvironment = ''
+ 
+global globalReportsStarted
+globalReportsStarted = False
+ 
+global auditReportPath
+auditReportPath = ''
  
 # list of audit objects.
 auditObjectAtoms = []
 auditObjectMolecules = []
+ 
+def getReportDirectory():
+    global globalReportsStarted
+    global auditReportPath
+ 
+    if not(globalReportsStarted):
+        globalReportsStarted = True
+ 
+        try :
+            auditReportPath = os.environ['WORKSPACE']
+            print "Jenkins Environment Workspace Path: " + auditReportPath
+        except:
+            None      
+ 
+        if (auditReportPath == "") :
+            auditReportPath = "../reports/"
+ 
+        mkdir_p(auditReportPath)       
+ 
+    return auditReportPath
  
 def appendToReport(strToAppend):
     global reportFileName
@@ -61,7 +85,7 @@ def appendToAudit(strToAppend):
  
 # enables the user to group atoms together as one
 class auditObjectMolecule:
-    auditTitle = ""   
+    auditTitle = ""  
     servername = ''
     auditObjectAtoms = []
     allPassed = True # Assume true and try to disprove
@@ -74,7 +98,7 @@ class auditObjectMolecule:
  
     def __init__(self, auditTitle, servername, bAllMustPass):
         self.auditObjectAtoms = []
-        self.allPassed = True # Assume true and try to disprove       
+        self.allPassed = True # Assume true and try to disprove      
         self.auditTitle = auditTitle
         self.servername = servername
         self.allMustPass = bAllMustPass
@@ -86,7 +110,7 @@ class auditObjectMolecule:
         global strEnvironment
         global strTechnologyType
  
-        if not(self.reportedAlready) :      
+        if not(self.reportedAlready) :     
             for auditObjectAtom in self.auditObjectAtoms:
                 if (auditObjectAtom.auditPassed == False):
                     self.allPassed = False
@@ -99,17 +123,17 @@ class auditObjectMolecule:
             if (self.allPassed):
                 appendToReport('...' + ',')
             elif ( (self.somePassed) & (self.allMustPass == False)) :
-                appendToReport('...' + ',')       
+                appendToReport('...' + ',')      
             elif (self.auditResult != ""):
-                appendToReport(self.auditResult + ',')                   
+                appendToReport(self.auditResult + ',')                  
             else:
                 appendToReport('ToDo' + ',')
  
-        self.reportedAlready = True       
+        self.reportedAlready = True      
  
 # OO based auditing atom - automatically reported on
 class auditObjectAtom():
-    servername = ""   
+    servername = ""  
     username = ""
     password = ""
  
@@ -162,10 +186,10 @@ class auditObjectAtom():
  
         appendToAudit('Env:' + strEnvironment + ' : ' + self.servername + ',' + passFailRecord + ',' + self.auditTitle + ',current:"' + currentValue + '",target:"' + targetValue + '"\n')
  
-    def applyTargetValue(self):       
-        print 'On Server: ' + self.servername + ' Applying : ' + self.auditTitle + '...'      
+    def applyTargetValue(self):      
+        print 'On Server: ' + self.servername + ' Applying : ' + self.auditTitle + '...'     
         result = setParameterValue(self.servername, self.username, self.password, self.cliVector, self.cliProperty, self.targetValue)
-        if (result == True) :               
+        if (result == True) :              
             self.auditPassed = result
         else:
             self.auditPassed = False
@@ -204,7 +228,7 @@ class auditObjectAtom():
  
         print 'On Server: ' + servername + ' Auditing : ' + self.auditTitle + '...end.'
  
-        print '\n'       
+        print '\n'      
  
     def renderIntoReport(self):
         if not(self.reportedAlready) :
@@ -223,7 +247,7 @@ class auditObjectAtom():
 def auditIsServerRunning(servername, username, password):
     auditPassed = False
  
-    try:   
+    try:  
         if (isServerRunning(servername, username, password)) :
             auditPassed = True
         else :
@@ -311,7 +335,7 @@ def auditMessageDrivenBeanPool(servername, username, password, targetMessageDriv
             print 'MessageDrivenBeanPool: FAIL'
             auditPassed = False
     else:
-        connected = False   
+        connected = False  
  
     if (connected) : cliConnected.disconnect()
  
@@ -374,7 +398,10 @@ def auditInitAudit(environment, technologyType):
     strTechnologyType = technologyType
  
     appendToAudit('Server, Test Result, Test' + '\n')
+    
+    appendToReport('Muse, https://sourceforge.net/projects/museproject/, \n')
     appendToReport('Middleware Audit' + '\n')
+
  
 #     pivotTableEntry = ['Server', 'Test', 'Test Result']
 #     pivotTable.append(pivotTableEntry)
@@ -390,7 +417,7 @@ def auditWriteAudit(server, auditText, bAuditPassed):
     appendToAudit(server + ',' + passFailRecord + ',' + auditText + '\n')
  
 def auditReport(environment, currentServerName):
-    global currentAuditReportServer       
+    global currentAuditReportServer      
     global currentAuditReportEnvironment
     global reportFirstRow
     global strEnvironment
@@ -402,41 +429,52 @@ def auditReport(environment, currentServerName):
     # HEADING of Report...
     ############################################################################
     if (currentAuditReportEnvironment != environment) :
+        currentAuditReportEnvironment = environment
+ 
         appendToReport("\nEnv: " + environment + "\n")
  
-    if (currentAuditReportEnvironment != environment) :
+    if (currentAuditReportServer != currentServerName) :
+        currentAuditReportServer = currentServerName       
+ 
         appendToReport('Server' + ',')
  
         for auditObjectAtom in auditObjectAtoms :
             if not(auditObjectAtom.reportedAlready):
-                if (auditObjectAtom.servername == currentServerName) :          
+                if (auditObjectAtom.servername == currentServerName) :         
                     appendToReport(auditObjectAtom.auditTitle + ',')
+                    # only update the environemnt has changed on successful reporting of something
+                    # from at leaat one server.
  
         for auditObjectMolecule in auditObjectMolecules:
             if not(auditObjectMolecule.reportedAlready):
                 if (auditObjectMolecule.servername == currentServerName) :
-                    appendToReport(auditObjectMolecule.auditTitle + ',')
-        appendToReport('\n')   
+                    appendToReport('\"' + auditObjectMolecule.auditTitle + '\"' + ',')
+ 
+                    # only update the environemnt has changed on successful reporting of something
+                    # from at leaat one server.
+ 
+        appendToReport('\n')
+ 
     ############################################################################
  
     ############################################################################
     # Data ROW of Report...
-    ############################################################################   
+    ############################################################################  
     appendToReport(currentServerName + ',')
  
     for auditObjectAtom in auditObjectAtoms:
         if not(auditObjectAtom.reportedAlready):
-            if (auditObjectAtom.servername == currentServerName) :
+            if (auditObjectAtom.servername == currentServerName):
                 auditObjectAtom.renderIntoReport()
+                auditObjectAtom.reportedAlready = True;
  
     for auditObjectMolecule in auditObjectMolecules:
         if not(auditObjectMolecule.reportedAlready):
-            if (auditObjectMolecule.servername == currentServerName) :
+            if (auditObjectMolecule.servername == currentServerName):
                 auditObjectMolecule.renderIntoReport()
+                auditObjectMolecule.reportedAlready = True;
  
     appendToReport('\n')
  
-    currentAuditReportServer = currentServerName
-    currentAuditReportEnvironment = environment
- 
     print 'auditReport for server : ' + currentServerName + ' in environment : ' + environment + '...end.'
+ 
