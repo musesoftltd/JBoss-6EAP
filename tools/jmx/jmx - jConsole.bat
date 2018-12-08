@@ -12,6 +12,11 @@ ECHO ... PLEASE SET JAVA_HOME !
 rem set JAVA_HOME=C:\Progra~1\Java\jdk1.7.0_80
 rem set JAVA_HOME=C:\Progra~1\Java\jdk1.8.0_92
 
+rem set trustStore Path
+set trustStorePath=..\..\keyStore.p12
+
+rem set trustStore Password
+set trustStorePassword=pword
 
 rem $Id$
 
@@ -90,7 +95,7 @@ call :SearchForJars "%JBOSS_MODULEPATH%\system\layers\base\org\jboss\threads\mai
 
 rem echo %CLASSPATH%
 
-"%JAVA_HOME%\bin\jconsole.exe" -J"-Djava.class.path=%CLASSPATH%" -J"-Djavax.net.ssl.trustStore=..\..\keyStore.p12" -J"-Djavax.net.ssl.trustStorePassword=pword"
+"%JAVA_HOME%\bin\jconsole.exe" -J"-Djava.class.path=%CLASSPATH%" -J"-Djavax.net.ssl.trustStore=%trustStorePath%" -J"-Djavax.net.ssl.trustStorePassword=%trustStorePassword%"
 :END
 goto :EOF
 

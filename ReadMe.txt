@@ -1,5 +1,5 @@
 ########################################################
-# For JBoss Scripting
+# For JBoss (EAP) Scripting
 ########################################################
 This part of the scripting environment will target JBoss.
 
