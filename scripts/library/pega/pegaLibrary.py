@@ -132,94 +132,68 @@ def deployPegaGateway(servername, username, password, applicationDeploymentSourc
 def deployPegaADM(servername, username, password, applicationDeploymentSourceFolder):
     print 'Deploying ADM for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
-        if cli.getCommandContext().isDomainMode():
-            cli.cmd("cd /host=master/core-service=platform-mbean/type=runtime")
-        else:
-            cli.cmd("cd /core-service=platform-mbean/type=runtime")
-
         deploymentArtefact = 'adm7.ear'
         deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-        
-
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
     finally:
-        cli.disconnect()
-
+        None
+            
     print 'Deploying ADM for server: ' + servername + '...end.'
     
 
 def upgradePegaADM(servername, username, password, applicationDeploymentSourceFolder):
     print 'Upgrading ADM for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli.connect(servername, username, password)
         deploymentArtefact = 'adm7.ear'
         upgradeToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-        
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
         
     finally:
-        cli.disconnect()
+        None
 
     print 'Upgrading ADM for server: ' + servername + '...end.'
     
 def deployPegaPRPC(servername, username, password, applicationDeploymentSourceFolder):
     print 'Deploying PRPC for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)    
         deploymentArtefact = 'prpc_j2ee14_jboss61JBM.ear'
-        deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-            
+        deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                            
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
         
     finally:
-        cli.disconnect()
+        None
 
     print 'Deploying PRPC for server: ' + servername + '...end.'
     
 def upgradePegaPRPC(servername, username, password, applicationDeploymentSourceFolder):
     print 'Upgrading PRPC for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
         deploymentArtefact = 'prpc_j2ee14_jboss61JBM.ear'
-        upgradeToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-            
+        upgradeToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                            
     except :
         print 'Deploying to server: ' + servername + ' FAILED: '
     finally:
-        cli.disconnect()
+        None
 
     print 'Upgrading PRPC for server: ' + servername + '...end.'
     
 def upgradePegaPRSysManage(servername, username, password, applicationDeploymentSourceFolder):
     print 'Upgrading PRPC for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
         deploymentArtefact = 'prsysmgmt_jboss.ear'
-        upgradeToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-            
+        upgradeToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                            
     except :
         print 'Deploying to server: ' + servername + ' FAILED: '
     finally:
-        cli.disconnect()
+        None
 
     print 'Upgrading PRPC for server: ' + servername + '...end.'
     
@@ -227,35 +201,27 @@ def upgradePegaPRSysManage(servername, username, password, applicationDeployment
 def deployPegaPRSYSManage(servername, username, password, applicationDeploymentSourceFolder):
     print 'Deploying PRSYSManage for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
         deploymentArtefact = 'prsysmgmt_jboss.ear'
-        deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-                
+        deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                                
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
         
     finally:
-        cli.disconnect()
+        None
 
     print 'Deploying PRSYSManage for server: ' + servername + '...end.'
 
 def deployPegaPRHelp(servername, username, password, applicationDeploymentSourceFolder):
     print 'Deploying PRHelp for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
         deploymentArtefact = 'prhelp.war'
         deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                
-
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
     finally:
-        cli.disconnect()
+        None
 
     print 'Deploying PRHelp for server: ' + servername + '...end.'    
 
@@ -280,17 +246,13 @@ def deployPegaMarketingHelp(servername, username, password, applicationDeploymen
 def deployPegaVBD(servername, username, password, applicationDeploymentSourceFolder):
     print 'Deploying VBD for server: ' + servername + '...'
     
-    cli = None
-
     try:        
-        cli = connectSilent(servername, username, password)
         deploymentArtefact = 'vbd.ear'
         deployToServer(servername, username, password, applicationDeploymentSourceFolder, deploymentArtefact)                                
-
     except:
         print 'Deploying to server: ' + servername + ' FAILED: '
     finally:
-        cli.disconnect()
+        None
 
     print 'Deploying VBD for server: ' + servername + '...end.'
 
