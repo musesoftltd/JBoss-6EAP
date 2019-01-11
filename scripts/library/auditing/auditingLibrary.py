@@ -30,9 +30,6 @@ currentAuditReportServer = ""
 global currentAuditReportEnvironment
 currentAuditReportEnvironment = ""
 
-# global strEnvironment
-# strEnvironment = ''
-
 global globalReportsStarted
 globalReportsStarted = False
 
@@ -62,15 +59,17 @@ def getReportDirectory():
         mkdir_p(auditReportPath)
 
     return auditReportPath
-
+ 
+    print "Generating Reports in: " +  getReportDirectory()
+ 
 def appendToReport(strToAppend):
     global reportFileName
     global strEnvironment
     global strTechnologyType
 
     if (reportFileName == '') :
-        reportFilename = './reports/managerial' + '-' + strTechnologyType + '-' + strEnvironment + '-' + datetimeSuffix  + '.csv'
-
+        reportFilename = getReportDirectory() + 'managerial' + '-' + strTechnologyType + '-' + strEnvironment + '-' + datetimeSuffix  + '.csv'
+ 
     appendToFile(strToAppend, reportFilename)
 
 def appendToAudit(strToAppend):
@@ -79,8 +78,8 @@ def appendToAudit(strToAppend):
     global strTechnologyType
 
     if (auditFileName == '') :
-        auditFileName = './reports/technical' + '-' + strTechnologyType + '-' + strEnvironment + '-' + datetimeSuffix  + '.csv'
-
+        auditFileName = getReportDirectory() + 'technical' + '-' + strTechnologyType + '-' + strEnvironment + '-' + datetimeSuffix  + '.csv'
+ 
     appendToFile(strToAppend, auditFileName)
 
 # enables the user to group atoms together as one
@@ -137,11 +136,12 @@ class auditObjectAtom():
     servername = ""
     username = ""
     password = ""
+ 
+    auditTitle = ""
 
     cliVector = ""
     cliProperty = ""
-
-    auditTitle = ""
+ 
     currentValue = ""
     targetValue = ""
 
@@ -257,10 +257,6 @@ def auditInitAudit(environment, technologyType):
     appendToReport('Muse,https://sourceforge.net/projects/museproject/ ' + '\n')
     appendToReport('Middleware Audit' + '\n')
 
-
-#     pivotTableEntry = ['Server', 'Test', 'Test Result']
-#     pivotTable.append(pivotTableEntry)
-
 def auditWriteAudit(server, auditText, bAuditPassed):
     passFailRecord = ""
 
@@ -288,17 +284,15 @@ def auditReport(environment, currentServerName):
 
         appendToReport("\nEnv: " + environment + "\n")
 
-    if (currentAuditReportServer != currentServerName) :
-        currentAuditReportServer = currentServerName
+        if (currentAuditReportServer != currentServerName) :
+            currentAuditReportServer = currentServerName
 
-        appendToReport('Server' + ',')
+            appendToReport('Server' + ',')
 
         for auditObjectAtom in auditObjectAtoms :
             if not(auditObjectAtom.titledAlready):
                 if (auditObjectAtom.servername == currentServerName) :
                     appendToReport(auditObjectAtom.auditTitle + ',')
-                    # only update the environemnt has changed on successful reporting of something
-                    # from at leaat one server.
                     auditObjectAtom.titledAlready = True
 
         for auditObjectMolecule in auditObjectMolecules:
@@ -332,5 +326,8 @@ def auditReport(environment, currentServerName):
                 auditObjectMolecule.reportedAlready = True;
 
     appendToReport('\n')
-
+ 
+    currentAuditReportServer = currentServerName
+    currentAuditReportEnvironment = environment
+ 
     print 'auditReport for server : ' + currentServerName + ' in environment : ' + environment + '...end.'
