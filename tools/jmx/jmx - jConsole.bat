@@ -3,7 +3,7 @@ rem -------------------------------------------------------------------------
 rem jConsole script for Windows
 rem -------------------------------------------------------------------------
 rem
-rem A script for running jVisualVM  with the remoting-jmx libraries on the classpath.
+rem A script for running jConsole  with the remoting-jmx libraries on the classpath.
 ECHO ... PLEASE SET JBOSS_HOME !
 rem set JBOSS_HOME=C:\dev\EAP-6.1.0\jboss-eap-6.1
 rem set JBOSS_HOME=C:\dev\wildfly-10.0.0.Final
@@ -16,7 +16,7 @@ rem set trustStore Path
 set trustStorePath=..\..\keyStore.p12
 
 rem set trustStore Password
-set trustStorePassword=pword
+set trustStorePassword=admin123#
 
 rem $Id$
 
