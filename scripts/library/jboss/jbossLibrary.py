@@ -1512,7 +1512,7 @@ def perfEnrichXAOracleDatasource(servername, username, password):
                 reloadServerThenWait(servername, username, password)
 
             issueCliCommand(servername, username, password, cliVector +
-                ":add(user-name=" + dsUsername + ',' +
+                ":add(user-name=" + dsUsername + '),'
                 "password=" + dsPassword + ',' +
                 "spy=false, \
                 wrap-xa-resource=true, \
