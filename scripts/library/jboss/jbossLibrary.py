@@ -238,7 +238,7 @@ def isServerReloadRequired(servername, username, password):
     
     return returnResult 
            
-def restartServerThenWait(servername, username, password):        
+def restartServerThenWait(servername, username, password, timeoutMinutes=1):        
     print 'Restarting server: ' + servername + '...'
         
     try:        
@@ -254,7 +254,7 @@ def restartServerThenWait(servername, username, password):
     
     print 'Waiting for server ready...' + servername + '...'
     # loop 4 times 15 sec x 10 is 10 minutes
-    loopRange = 4 * 10;
+    loopRange = 4 * timeoutMinutes;
     for n in range(0, loopRange) :
         try:
             result = isServerRunning(servername, username, password)
