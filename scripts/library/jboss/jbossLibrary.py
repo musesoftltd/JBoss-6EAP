@@ -253,15 +253,15 @@ def restartServerThenWait(servername, username, password):
     print 'Restarting server: ' + servername + '...end.'
     
     print 'Waiting for server ready...' + servername + '...'
-    # loop 18 times at 10 secs is 3 minutes
-    loopRange = 18;
+    # loop 4 times 15 sec x 10 is 10 minutes
+    loopRange = 4 * 10;
     for n in range(0, loopRange) :
         try:
             result = isServerRunning(servername, username, password)
             if (result == True) :
                 break
             else :
-                sleep(10)
+                sleep(15)
         except:
             continue
                     
