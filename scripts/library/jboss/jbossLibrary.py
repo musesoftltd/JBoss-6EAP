@@ -238,7 +238,7 @@ def isServerReloadRequired(servername, username, password):
     
     return returnResult 
            
-def restartServerThenWait(servername, username, password, timeoutMinutes=1):        
+def restartServerThenWait(servername, username, password, timeoutMinutes=5):        
     print 'Restarting server: ' + servername + '...'
         
     try:        
