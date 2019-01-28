@@ -15,7 +15,7 @@ rem set trustStore Path
 set trustStorePath=..\..\keyStore.p12
 
 rem set trustStore Password
-set trustStorePassword=pword
+set trustStorePassword=admin123#
 
 rem $Id$
 
