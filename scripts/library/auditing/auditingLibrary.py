@@ -43,13 +43,14 @@ def getReportDirectory():
         globalReportsStarted = True
 
         try :
-            auditReportPath = os.environ['WORKSPACE']
+            auditReportPath = os.environ['WORKSPACE'] + '/reports/'
             print "Jenkins Environment Workspace Path: " + auditReportPath
         except:
             None
 
         if (auditReportPath == "") :
             auditReportPath = "../reports/"
+            print "Report Path: " + auditReportPath
 
         mkdir_p(auditReportPath)
 
