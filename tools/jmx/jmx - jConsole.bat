@@ -4,6 +4,7 @@ rem jConsole script for Windows
 rem -------------------------------------------------------------------------
 rem
 rem A script for running jConsole  with the remoting-jmx libraries on the classpath.
+
 ECHO ... PLEASE SET JBOSS_HOME !
 rem set JBOSS_HOME=C:\dev\EAP-6.4.0\jboss-eap-6.1
 
