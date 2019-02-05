@@ -51,6 +51,7 @@ def getReportDirectory():
 
         if (auditReportPath == "") :
             auditReportPath = "../reports/"
+            print "Report Path: " + auditReportPath
 
         mkdir_p(auditReportPath)
 
