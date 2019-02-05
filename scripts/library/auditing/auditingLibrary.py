@@ -45,7 +45,11 @@ def getReportDirectory():
         try :
             workspaceReportPath = os.environ['WORKSPACE']
             auditReportPath = workspaceReportPath + '/reports/'
+<<<<<<< HEAD
             print "---> Jenkins Environment Workspace Path: " + auditReportPath
+=======
+            print "Jenkins Environment Workspace Path: " + auditReportPath
+>>>>>>> branch 'master' of https://github.com/musesoftltd/JBoss-6EAP
         except:
             None
 
