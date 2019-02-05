@@ -309,7 +309,7 @@ def execSshRemoteUsrPwd(hostname, username, password, commandsSemiColonSeperated
     config.put("StrictHostKeyChecking", "no")
     config.put("GSSAPIAuthentication", "no")
     config.put("UnknownHostVerification", "no")
-    config.put("PreferredAuthentications", "publickey");
+    #config.put("PreferredAuthentications", "publickey");
     session.setConfig(config);
     
     # session.setTimeout(100)
