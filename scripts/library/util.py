@@ -12,6 +12,7 @@ import re
 from string import rsplit, split
 import sys
 from threading import Thread
+from time import sleep
 
 from com.jcraft.jsch import JSch
 
@@ -231,7 +232,7 @@ def gatherThreads(strThreadPoolId):
     for t in localThreadsList:
         t.join()
 
-def execSshRemote(hostname, username, identityFileFullPath, identityPassword, commandsSemiColonSeperated, sessionTimeoutSecs = 0):
+def execSshRemote(hostname, username, identityFileFullPath, identityPassword, commandsSemiColonSeperated, sessionTimeoutSecs = 0, waitForOutput = True):
     _hostname = hostname
     _username = username
     _identityPassword = identityPassword
@@ -270,38 +271,43 @@ def execSshRemote(hostname, username, identityFileFullPath, identityPassword, co
  
     channel.connect();
  
-    while (1) :
-        n = stdin.read()
-        if n == -1:
-            break
-        if (chr(n) == '\n'):
-            outputBuffer.append('|')
-        elif (chr(n) == '\r'):
-            outputBuffer.append('|')
-        else :
-            outputBuffer.append(chr(n))
-
-    while (1) :
-        n = stdinExt.read()
-        if n == -1:
-            break
-        if (chr(n) == '\n'):
-            outputBuffer.append('|')
-        elif (chr(n) == '\r'):
-            outputBuffer.append('|')
-        else :
-            outputBuffer.append(chr(n))
-                    
+    if(waitForOutput == True):
+        while (1) :
+            n = stdin.read()
+            if n == -1:
+                break
+            if (chr(n) == '\n'):
+                outputBuffer.append('|')
+            elif (chr(n) == '\r'):
+                outputBuffer.append('|')
+            else :
+                outputBuffer.append(chr(n))
+    
+        while (1) :
+            n = stdinExt.read()
+            if n == -1:
+                break
+            if (chr(n) == '\n'):
+                outputBuffer.append('|')
+            elif (chr(n) == '\r'):
+                outputBuffer.append('|')
+            else :
+                outputBuffer.append(chr(n))
+    else :
+        sleep(sessionTimeoutSecs)
+                        
     print "Command on: " + hostname + " : " + _command
     print "\toutput: " + outputBuffer.toString()
     
-    channel.disconnect();
-    session.disconnect()    
+    channel.disconnect()
+    session.disconnect()
+    
+    del channel    
+    del session    
     
     return outputBuffer.toString()
 
-# https://stackoverflow.com/questions/18835756/how-do-i-authenticate-programmatically-using-jsch
-def execSshRemoteUsrPwd(hostname, username, password, commandsSemiColonSeperated, sessionTimeoutSecs = 0):
+def execSshRemoteUsrPwd(hostname, username, password, commandsSemiColonSeperated, sessionTimeoutSecs = 0, waitForOutput = True):
     _hostname = hostname
     _username = username 
     _password = password
@@ -340,31 +346,39 @@ def execSshRemoteUsrPwd(hostname, username, password, commandsSemiColonSeperated
     
     channel.connect(sessionTimeoutSecs * 1000);
             
-    while (1) :
-        n = stdin.read()
-        if n == -1:
-            break
-        if (chr(n) == '\n'):
-            outputBuffer.append('|')
-        elif (chr(n) == '\r'):
-            outputBuffer.append('|')
-        else :
-            outputBuffer.append(chr(n))
-    
-    while (1) :
-        n = stdinExt.read()
-        if n == -1:
-            break
-        if (chr(n) == '\n'):
-            outputBuffer.append('|')
-        elif (chr(n) == '\r'):
-            outputBuffer.append('|')
-        else :
-            outputBuffer.append(chr(n))
+    if(waitForOutput == True):
+        while (1) :
+            n = stdin.read()
+            if n == -1:
+                break
+            if (chr(n) == '\n'):
+                outputBuffer.append('|')
+            elif (chr(n) == '\r'):
+                outputBuffer.append('|')
+            else :
+                outputBuffer.append(chr(n))
+        
+        while (1) :
+            n = stdinExt.read()
+            if n == -1:
+                break
+            if (chr(n) == '\n'):
+                outputBuffer.append('|')
+            elif (chr(n) == '\r'):
+                outputBuffer.append('|')
+            else :
+                outputBuffer.append(chr(n))
  
+    else :
+        sleep(sessionTimeoutSecs)
+        
     print "Command on: " + hostname + " : " + _command
     print "\toutput: " + outputBuffer.toString()
 
-    channel.disconnect();
- 
+    channel.disconnect()
+    session.disconnect()
+
+    del channel
+    del session    
+        
     return outputBuffer.toString()
