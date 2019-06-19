@@ -6,6 +6,7 @@ from library.auditing.auditingLibrary import auditObjectAtom, auditObjectAtoms, 
     auditObjectMolecule
 from library.jboss.jbossLibrary import getAllDataSources, getAllXaDataSources
 
+
 def auditServersBaseAudit(environment, servername, propertiesDict, bApplyRequiredChanges) :
     # merge global propertiesDict into dict - deliberately overwriting local with global dict all values
     runtimeProperties = dict()
@@ -32,17 +33,7 @@ def auditServersBaseAudit(environment, servername, propertiesDict, bApplyRequire
     oAuditObjectMolecule2.auditObjectAtoms.append(auditObjectAtom(servername, runtimeProperties["username"], runtimeProperties["password"], "SSL Protocols", "/subsystem=web/connector=https/configuration=ssl/", "protocol", runtimeProperties["sslProtocols"], bApplyRequiredChanges))
     oAuditObjectMolecule2.auditObjectAtoms.append(auditObjectAtom(servername, runtimeProperties["username"], runtimeProperties["password"], "Cipher Suite", "/subsystem=web/connector=https/configuration=ssl/", "cipher-suite", runtimeProperties["cipherSuite"], bApplyRequiredChanges))
 
-#     allDatasourcesResponseResultList = getAllDataSources(servername, runtimeProperties["username"], runtimeProperties["password"])
-    allDatasourcesResponseResultList = [
-        'StagingInbound',
-        'AdminPegaRULES',
-        'PegaRULES',
-        'adm7DataSource',
-        'ihDataSource',
-        'nbamDataSource',
-        'padDataSource',
-        'vbdDataSource',
-        ]
+    allDatasourcesResponseResultList = getAllDataSources(servername, runtimeProperties["username"], runtimeProperties["password"])
 
     if (allDatasourcesResponseResultList) :
         oAuditObjectMolecule3 = auditObjectMolecule("Datasource (Non XA) Connection Perf Options", servername, True)
