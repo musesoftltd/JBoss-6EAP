@@ -3,6 +3,7 @@
 	<name>JBoss-6eap</name>
 	<comment></comment>
 	<projects>
+		<project>Linux-RedHat-Bash</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -159,10 +159,10 @@ class auditObjectAtom():
 
         self.auditPassed = False
 
-        self.returnResult = self.audit(servername, username, password)
+        self.returnResult = self.audit()
         if ((self.auditPassed == False) & (bApplyTargetValue)):
             self.applyTargetValue()
-            self.audit(servername, username, password)
+            self.audit()
 
     def auditWriteAudit(self):
         targetValue = ""
@@ -199,9 +199,9 @@ class auditObjectAtom():
 
         return self.auditResult
 
-    def audit(self, servername, username, password):
-        print 'On Server: ' + servername + ' Auditing : ' + self.auditTitle + '...'
-        self.currentValue = getParameterValue(servername, username, password, self.cliVector, self.cliProperty)
+    def audit(self):
+        print 'On Server: ' + self.servername + ' Auditing : ' + self.auditTitle + '...'
+        self.currentValue = getParameterValue(self.servername, self.username, self.password, self.cliVector, self.cliProperty)
         self.auditResult = self.currentValue
         print 'Target Value: ' + self.targetValue
         print 'Actual Value: ' + self.currentValue
@@ -225,7 +225,7 @@ class auditObjectAtom():
 
         self.auditWriteAudit()
 
-        print 'On Server: ' + servername + ' Auditing : ' + self.auditTitle + '...end.'
+        print 'On Server: ' + self.servername + ' Auditing : ' + self.auditTitle + '...end.'
 
         print '\n'
 
