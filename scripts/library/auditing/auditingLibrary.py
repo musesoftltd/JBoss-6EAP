@@ -186,13 +186,13 @@ class auditObjectMolecule:
                 self.allPassed = False
 
             if (self.allPassed):
-                ReportingObject.appendToReport('...' + ',')
+                reportingObject.appendToReport('...' + ',')
             elif ( (self.somePassed) & (self.allMustPass == False)) :
-                ReportingObject.appendToReport('...' + ',')
+                reportingObject.appendToReport('...' + ',')
             elif (self.auditResult != ""):
-                ReportingObject.appendToReport(self.auditResult + ',')
+                reportingObject.appendToReport(self.auditResult + ',')
             else:
-                ReportingObject.appendToReport('ToDo' + ',')
+                reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True
 
@@ -251,7 +251,7 @@ class auditObjectAtom():
         else :
             currentValue = self.currentValue
 
-        ReportingObject.appendToAudit('Env:' + ReportingObject.strEnvironment + ' : ' + self.servername + ',' + passFailRecord + ',' + self.auditTitle + ',current:"' + currentValue + '",target:"' + targetValue + '"\n')
+        reportingObject.appendToAudit('Env:' + ReportingObject.strEnvironment + ' : ' + self.servername + ',' + passFailRecord + ',' + self.auditTitle + ',current:"' + currentValue + '",target:"' + targetValue + '"\n')
 
     def applyTargetValue(self):
         print 'On Server: ' + self.servername + ' Applying : ' + self.auditTitle + '...'
@@ -300,12 +300,12 @@ class auditObjectAtom():
     def renderIntoReport(self):
         if not(self.reportedAlready) :
             if (self.auditPassed) :
-                ReportingObject.appendToReport('...' + ',')
+                reportingObject.appendToReport('...' + ',')
             elif (self.auditResult == 'False') :
-                ReportingObject.appendToReport(str('ToDo') + ',')
+                reportingObject.appendToReport(str('ToDo') + ',')
             elif (str(self.auditResult) == 'Unknown') :
-                ReportingObject.appendToReport("ToDo" + ',')
+                reportingObject.appendToReport("ToDo" + ',')
             else :
-                ReportingObject.appendToReport('ToDo' + ',')
+                reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True;
