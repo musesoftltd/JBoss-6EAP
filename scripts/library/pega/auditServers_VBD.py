@@ -4,7 +4,7 @@ Created on 20 Oct 2016
 @author: ...
 '''
 from environmentProperties.allEnvs.propertiesPega import dictionary as globalDictionary
-from library.auditing.auditingLibrary import auditReport, \
+from library.auditing.auditingLibrary import reportingObject, \
     auditObjectAtom, auditObjectMolecule, auditObjectAtoms
 from library.jboss.jbossLibrary import getAllDataSources, connectSilent
 from library.pega.auditServers_basePega import auditServersBasePega
@@ -48,5 +48,5 @@ def auditServersVBD(environment, servers, propertiesDictionary, bApplyRequiredCh
     gatherThreads(strThreadPoolId)
 
     for servername in servers:
-        auditReport(environment, servername)
+        reportingObject.auditReport(environment, servername)
 

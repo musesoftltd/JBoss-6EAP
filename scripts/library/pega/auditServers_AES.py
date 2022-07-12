@@ -5,8 +5,8 @@ Created on 20 Oct 2016
 '''
 
 from environmentProperties.allEnvs.propertiesPega import dictionary as globalDictionary
-from library.auditing.auditingLibrary import auditObjectAtom, auditReport, auditObjectMolecule, \
-    auditObjectAtoms
+from library.auditing.auditingLibrary import auditObjectAtom, auditObjectMolecule, \
+    auditObjectAtoms, reportingObject
 from library.jboss.jbossLibrary import getAllDataSources, connectSilent
 from library.pega.auditServers_basePega import auditServersBasePega
 from library.util import scatterThread, gatherThreads
@@ -50,4 +50,4 @@ def auditServersAES(environment, servers, propertiesDictionary, bApplyRequiredCh
     gatherThreads(strThreadPoolId)
 
     for servername in servers:
-        auditReport(environment, servername)
+        reportingObject.auditReport(environment, servername)

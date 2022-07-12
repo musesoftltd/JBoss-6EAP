@@ -7,7 +7,7 @@ Created on 4 Apr 2017
 from environmentProperties.allEnvs import propertiesMdm as globalProperties
 from library.auditing.auditServerBase import auditServersBaseAudit
 from library.auditing.auditingLibrary import auditObjectAtoms, auditObjectAtom, \
-        auditObjectMolecule, auditReport
+        auditObjectMolecule, reportingObject
 from library.jboss.jbossLibrary import connectSilent
 from library.util import scatterThread, gatherThreads
  
@@ -76,4 +76,4 @@ def auditServersMdm(environment, servers, propertiesDictionary, bApplyRequiredCh
     gatherThreads(strThreadPoolId)
  
     for servername in servers:
-        auditReport(environment, servername)
+        reportingObject.auditReport(environment, servername)
