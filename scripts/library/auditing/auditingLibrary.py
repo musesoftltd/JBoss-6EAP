@@ -14,7 +14,7 @@ auditObjectAtoms = []
 global auditObjectMolecules
 auditObjectMolecules = []
 
-class reportingObject:
+class ReportingObject:
         
     datetimeSuffix = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H.%M.%S')
     
@@ -148,7 +148,7 @@ class reportingObject:
     
         self.appendToAudit(server + ',' + passFailRecord + ',' + auditText + '\n')
 
-ReportingObject = reportingObject()
+reportingObject = ReportingObject()
 
 # enables the user to group atoms together as one
 class auditObjectMolecule:
