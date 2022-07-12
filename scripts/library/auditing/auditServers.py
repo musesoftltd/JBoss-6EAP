@@ -3,7 +3,7 @@
 '''
 from environmentProperties.allEnvs import propertiesPega as globalProperties
 from library.auditing.auditServerBase import auditServersBaseAudit
-from library.auditing.auditingLibrary import auditReport
+from library.auditing.auditingLibrary import reportingObject
 from library.util import gatherThreads, scatterThread
 
 
@@ -25,4 +25,4 @@ def auditServers(environment, servers, propertiesDict, bApplyRequiredChanges) :
     
     gatherThreads("auditServersBaseAudit")
     for servername in servers:    
-        auditReport(environment, servername)
+        reportingObject.auditReport(environment, servername)
