@@ -14,6 +14,7 @@ auditObjectAtoms = []
 global auditObjectMolecules
 auditObjectMolecules = []
 
+
 class ReportingObject:
         
     datetimeSuffix = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H.%M.%S')
@@ -36,27 +37,39 @@ class ReportingObject:
     
     reportFirstRow = ''
     
-    def __init__(self):    
-        print "Generating Reports in: " +  self.getReportDirectory()
+    def __init__(self):
+        auditReportPath = self.getReportDirectory()   
+        print "Generating Reports in: " + auditReportPath 
         
     def getReportDirectory(self):
+    
         if not(self.globalReportsStarted):
             self.globalReportsStarted = True
-    
-            try :
-                workspaceReportPath = os.environ['WORKSPACE']
-                auditReportPath = workspaceReportPath + '/reports/'
-                print "---> Jenkins Environment Workspace Path: " + auditReportPath
-            except:
-                None
-    
-            if (self.auditReportPath == "") :
-                self.auditReportPath = "../reports/"
-                print "Report Path: " + self.auditReportPath
-    
-            mkdir_p(self.auditReportPath)
+            return self.auditReportPath;
+                
+        returnStr = ''
+        
+        if len(self.auditReportPath) > 0 :
+            return self.auditReportPath
             
-        return self.auditReportPath
+        if not(self.globalReportsStarted):
+            self.globalReportsStarted = True            
+        
+        returnStr = '../reports'
+        try:                        
+          if len(os.environ['WORKSPACE']) > 0 :
+              workspaceReportPath = os.environ['WORKSPACE']
+              
+              returnStr = workspaceReportPath + '/reports/'
+              print "---> Jenkins Environment Workspace Path: " + returnStr
+        except:
+            None
+
+        mkdir_p(returnStr)
+
+        print "Report Path: " + returnStr
+            
+        return returnStr
 
     def appendToReport(self, strToAppend):
     
@@ -147,6 +160,7 @@ class ReportingObject:
             passFailRecord = 'Fail *'
     
         self.appendToAudit(server + ',' + passFailRecord + ',' + auditText + '\n')
+
 
 reportingObject = ReportingObject()
 
@@ -309,3 +323,7 @@ class auditObjectAtom():
                 reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True;
+        
+
+reportingObject = ReportingObject()
+        
