@@ -43,33 +43,27 @@ class ReportingObject:
         
     def getReportDirectory(self):
     
-        if not(self.globalReportsStarted):
+        if not self.globalReportsStarted :
             self.globalReportsStarted = True
-            return self.auditReportPath;
-                
-        returnStr = ''
-        
-        if len(self.auditReportPath) > 0 :
-            return self.auditReportPath
             
-        if not(self.globalReportsStarted):
-            self.globalReportsStarted = True            
+        if len(self.auditReportPath) > 0 :
+            return self.auditReportPath         
         
-        returnStr = '../reports'
+        self.auditReportPath = '../reports/'
         try:                        
           if len(os.environ['WORKSPACE']) > 0 :
               workspaceReportPath = os.environ['WORKSPACE']
               
-              returnStr = workspaceReportPath + '/reports/'
-              print "---> Jenkins Environment Workspace Path: " + returnStr
+              self.auditReportPath = workspaceReportPath + '/reports/'
+              print "---> Jenkins Environment Workspace Path: " + self.auditReportPath
         except:
             None
 
-        mkdir_p(returnStr)
+        mkdir_p(self.auditReportPath)
 
-        print "Report Path: " + returnStr
+        print "Report Path: " + self.auditReportPath
             
-        return returnStr
+        return self.auditReportPath
 
     def appendToReport(self, strToAppend):
     
@@ -190,7 +184,7 @@ class auditObjectMolecule:
 
     def renderIntoReport(self):
         if not(self.reportedAlready) :
-            for auditObjectAtom in auditObjectAtoms:
+            for auditObjectAtom in self.auditObjectAtoms:
                 if (auditObjectAtom.auditPassed == False):
                     self.allPassed = False
                 else:
@@ -200,12 +194,14 @@ class auditObjectMolecule:
                 self.allPassed = False
 
             if (self.allPassed):
+                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ' PASSED'
                 reportingObject.appendToReport('...' + ',')
             elif ( (self.somePassed) & (self.allMustPass == False)) :
                 reportingObject.appendToReport('...' + ',')
             elif (self.auditResult != ""):
                 reportingObject.appendToReport(self.auditResult + ',')
             else:
+                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ' FAILED'
                 reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True
