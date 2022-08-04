@@ -194,14 +194,14 @@ class auditObjectMolecule:
                 self.allPassed = False
 
             if (self.allPassed):
-                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ' PASSED'
+                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ', PASSED'
                 reportingObject.appendToReport('...' + ',')
             elif ( (self.somePassed) & (self.allMustPass == False)) :
                 reportingObject.appendToReport('...' + ',')
             elif (self.auditResult != ""):
                 reportingObject.appendToReport(self.auditResult + ',')
             else:
-                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ' FAILED'
+                print 'On Server: ' + self.servername + ' AuditMolecule : ' + self.auditTitle + ', FAILED'
                 reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True
@@ -310,16 +310,16 @@ class auditObjectAtom():
     def renderIntoReport(self):
         if not(self.reportedAlready) :
             if (self.auditPassed) :
-                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ' PASSED'
+                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ', PASSED'
                 reportingObject.appendToReport('...' + ',')
             elif (self.auditResult == 'False') :
-                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ' FAILED'
+                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ', FAILED'
                 reportingObject.appendToReport(str('ToDo') + ',')
             elif (str(self.auditResult) == 'Unknown') :
-                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ' FAILED'
+                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ', FAILED'
                 reportingObject.appendToReport("ToDo" + ',')
             else :
-                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ' FAILED'
+                print 'On Server: ' + self.servername + ' AuditAtom : ' + self.auditTitle + ', FAILED'
                 reportingObject.appendToReport('ToDo' + ',')
 
         self.reportedAlready = True;
